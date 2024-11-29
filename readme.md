@@ -1,7 +1,7 @@
 ### Overview 
 This project intends to achieve following -
 - Set up Spark and Hive on Amazon EKS using Terraform 
-- Use local PC as spark driver and run following - 
+- Use an ec2 instance as spark driver and run following - 
    + Spark job to read s3 Nginx logs and store the processed version in delta format in s3 itself. 
    + Run Spark SQL queries on Hive on the processed data 
 
