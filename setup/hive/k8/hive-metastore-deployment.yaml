@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hive-metastore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hive-metastore
+  template:
+    metadata:
+      labels:
+        app: hive-metastore
+    spec:
+      containers:
+      - name: hive-metastore
+        image: dsharma080/hive-metastore:latest
+        ports:
+        - containerPort: 9083
+        env:
+        - name: METASTORE_DB_URL
+          value: "jdbc:mysql://terraform-20241128131751885900000007.chm2k0u0qabk.ap-south-1.rds.amazonaws.com:3306/hivemetastore"
+        - name: METASTORE_DB_USER
+          value: "granica_test"
+        - name: METASTORE_DB_PASSWORD
+          value: "granica_password"
