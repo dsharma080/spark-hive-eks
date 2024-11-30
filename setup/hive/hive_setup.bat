@@ -9,6 +9,14 @@ IF %ERRORLEVEL% NEQ 0 (
     exit /b %ERRORLEVEL%
 )
 
+REM Run Python script to generate hive deployment configuration
+echo Running Python script to generate hive deployment configuration...
+python generate_hive_metastore_deployment.py
+IF %ERRORLEVEL% NEQ 0 (
+    echo Failed to execute generate_hive_metastore_deployment.py. Exiting.
+    exit /b %ERRORLEVEL%
+)
+
 REM Build Docker image
 echo Building Docker image...
 docker build -t dsharma080/hive-metastore:latest .
