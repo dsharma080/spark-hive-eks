@@ -96,36 +96,67 @@ CREATE TABLE delta_table USING delta LOCATION 's3a://granica-assignment/delta-ou
 Queries 
 1. Top 5 IPs daily 
 ```
-SELECT ip, date, SUM(request_count) AS total_request_count
-FROM delta_table
+SELECT ip, date, total_request_count
+FROM (
+  SELECT 
+    ip, 
+    date, 
+    SUM(request_count) AS total_request_count,
+    ROW_NUMBER() OVER (PARTITION BY date ORDER BY SUM(request_count) DESC) AS rank
+  FROM delta_table
   GROUP BY ip, date
-  ORDER BY date, total_request_count DESC
-  LIMIT 5
+) ranked_data
+WHERE rank <= 5
+ORDER BY date, rank;
+
 ```
 
 2. Top 5 device_type daily
 ```
-  SELECT device_type, date, SUM(request_count) AS total_request_count
+SELECT device_type, date, total_request_count
+FROM (
+  SELECT 
+    device_type, 
+    date, 
+    SUM(request_count) AS total_request_count,
+    ROW_NUMBER() OVER (PARTITION BY date ORDER BY SUM(request_count) DESC) AS rank
   FROM requests
   GROUP BY device_type, date
-  ORDER BY date, total_request_count DESC
-  LIMIT 5
+) ranked_data
+WHERE rank <= 5
+ORDER BY date, rank;
+
 ```
 
 3. Top 5 IPs weekly 
 ```
-  SELECT ip, WEEKOFYEAR(date) AS week, SUM(request_count) AS total_request_count
+SELECT ip, week, total_request_count
+FROM (
+  SELECT 
+    ip, 
+    WEEKOFYEAR(date) AS week, 
+    SUM(request_count) AS total_request_count,
+    ROW_NUMBER() OVER (PARTITION BY WEEKOFYEAR(date) ORDER BY SUM(request_count) DESC) AS rank
   FROM requests
   GROUP BY ip, WEEKOFYEAR(date)
-  ORDER BY week, total_request_count DESC
-  LIMIT 5
+) ranked_data
+WHERE rank <= 5
+ORDER BY week, rank;
+
 ```
 
 4. Top 5 device_type weekly 
 ```
-  SELECT device_type, WEEKOFYEAR(date) AS week, SUM(request_count) AS total_request_count
+SELECT device_type, week, total_request_count
+FROM (
+  SELECT 
+    device_type, 
+    WEEKOFYEAR(date) AS week, 
+    SUM(request_count) AS total_request_count,
+    ROW_NUMBER() OVER (PARTITION BY WEEKOFYEAR(date) ORDER BY SUM(request_count) DESC) AS rank
   FROM requests
   GROUP BY device_type, WEEKOFYEAR(date)
-  ORDER BY week, total_request_count DESC
-  LIMIT 5
+) ranked_data
+WHERE rank <= 5
+ORDER BY week, rank;
 ```
