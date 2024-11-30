@@ -15,6 +15,9 @@ This project intends to achieve following -
 * Putty
 
 ### Setup 
+
+Note the setup is done for Windows powershell. Please make changes accordingly for your OS environment. 
+
 #### Setup EKS 
 ```
 cd setup/terraform
@@ -63,7 +66,7 @@ sbt assembly // or do via Intellij
 
 Set .ppk file path which is used by pscp
 ```
-set PPK_FILE=<path_to_ppk_file>
+$env:PPK_FILE=<path_to_ppk_file>
 ```
 
 Transfer the files to the spark driver machine
