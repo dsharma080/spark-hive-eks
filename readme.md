@@ -50,7 +50,9 @@ cd setup/hive
 ./hive_setup.bat
 ```
 Export the hive service endpoint (extract using `kubectl get services`)
-set HIVE_ENDPOINT=<hive_endpoint>
+```
+$env:HIVE_ENDPOINT=<hive_endpoint>
+```
 
 #### Spark driver setup
 Create the jar file 
